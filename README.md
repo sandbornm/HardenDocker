@@ -1,8 +1,9 @@
 # A security tutorial for Docker *beginners* - How to harden your Docker image
 
+## Assumptions: readers already have Docker Desktop and Docker CLI tools installed but are not familiar with containerization in general, how Docker works, or security practices for containers.
+
 ## Table of Contents
 ### [How does Docker work and what is an image?](##how-does-docker-work-and-what-is-an-image?)
-### [How does the host machine interact with your Docker container?](##how-does-the-host-machine-interact-with-your-docker-container?)
 ### [Understanding default security configurations](##understanding-default-security-configurations)
 ### [How can the security configuration change?](##understanding-how-docker-containers-are-compromised)
 ### [Tools to audit and harden your Docker images](##tools-to-audit-and-harden-your-docker-images)
@@ -32,28 +33,47 @@ Docker is useful because it allows developers and companies to create applicatio
 ### A Linux aside
 To understand how these interactions take place we will first unpack a few essential concepts that make *containerization* possible:
 
-shared kernel architecture
-take a detour into Linux
-Linux kernel
-namespaces
-control groups
-network interface
+The **Linux kernel** is the bridge between the hardware and the processes of a computer and manages the resources of the device. The kernel has 4 main responsibilities:
 
-### daemons and clients and registries ~~(Oh my!)~~
+1. Memory Management - where to store specific data and when to delete it
+2. Process Management - organize when and how long certain processes can access the CPU
+3. Device drivers - handle the interface between hardware and the processes
+4. System calls/security - handle requests from processes to access other resources
+
+The kernel has its own isolated memory space in the operating system to acomplish these tasks. An **operating system** supports a computer's basic responsibilities. This includes things like scheduling tasks, running applications, and controlling connected devices (like bluetooth keyboards). 
+
+Think of the kernel as the staff at your favorite restaurant. Hosts/hostesses are responsible for determining which tables are empty and which need to be prepared for future guests (memory management). The host or hostess should also ensure that all parties are served by one or more waiters/waitresses (process management). The waiters/waitresses interpret what the guests order and communicate this information to the kitchen (device drivers). Finally, hosts or waiters can respond to requests from guests or parties about their dining experience and are responsible for ensuring guests have a comfortable and satisfying time at the restaurant (System calls and security). 
+
+So what does the Linux kernel have to do with Docker?
+
+Docker takes advantage of the Linux kernel in a special way to provide containerization to the user. The most important of these properties is the idea of a **shared kernel architecture**. This means that Docker containers *share* the kernel of the host operating system. This is part of what makes Docker containers so lightweight and efficient. They share the core resources with the machine that has the container. Luckily, there are a few mechanisms in place to ensure that a Docker container does not have unrestricted access to the kernel and the kernel does not have unrestricted access to the container.
+
+### Default security mechanisms
+1. namespaces provide the layer of isolation between the Docker container and the Linux kernel. A **namespace** specifies kernel resources to which a set of processes has access. A Docker container has a set of namespaces to provide isolation between other containers and the rest of the kernel. This narrows the permissions of a container in several different places:
+
+* PID (process ID) namespace to isolate processes
+* NET (network) namespace to control network interfaces
+* IPC (interprocess communication) to manage access to shared resources between processes
+* MNT (mount) namespace to manage filesystem mount points (a **filesystem** controls how data is stored and retrieved, a **mount point** is a directory to access files and folders on disk)
+* UTS (Unix time sharing) namespace isolates the data that identifies the kernel and version
+
+All of these namespaces work together to basically ensure that there is mutual respect between the kernel and the container, and they strictly define what is shared between the two entities.
+
+2. control groups
+
+3. UnionFS 
+
+4. network interface
+
+### daemons and clients and engines ~~(Oh my!)~~
 docker daemon
 docker client
-docker registry
+docker engine
 
-### Host interaction and privileged access
-
-## Understanding default security configurations
-
-### On the structure of Docker containers
+### Structure of a Docker containers
 Well isolated by default- ability to control level of isolation from network, storage, or other subsystems from other images and/or host machine. 
 
 containers are generally small not many entry points
-
-
 
 ## Understanding how Docker containers are compromised
 
@@ -66,7 +86,7 @@ containers are generally small not many entry points
 attack surface of the docker daemon
 runC root access remote execution
 
-## Tools to audit and harden your Docker images
+## Docker security and tools to audit and harden your Docker images
 
 ### Best practices
 Docker content trust
@@ -74,7 +94,6 @@ do not use root access
 automate scanning of containers
 
 ### Automate, Automate, Automate
-
 
 ### Scanning software
 
@@ -91,6 +110,8 @@ https://resources.whitesourcesoftware.com/blog-whitesource/container-security-sc
 https://geekflare.com/docker-architecture/
 https://docs.docker.com/engine/security/security/
 https://sysdig.com/blog/docker-image-scanning/
+https://www.redhat.com/en/topics/linux/what-is-the-linux-kernel
+https://medium.com/@nagarwal/understanding-the-docker-internals-7ccb052ce9fe
 
 ### Additional info
 
