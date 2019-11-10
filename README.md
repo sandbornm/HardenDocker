@@ -1,4 +1,4 @@
-# A security tutorial for Docker *beginners* - How to harden your Docker image
+# A tutorial on Docker and Docker security for *beginners*: How to harden your Docker image
 
 ## Assumptions: readers already have Docker Desktop and Docker CLI tools installed but are not familiar with containerization in general, how Docker works, or security practices for containers.
 
@@ -19,7 +19,7 @@ So, you've decided to use Docker in your programming endeavors. However, you've 
 Docker is an open source software that surfacede in 2013 that allows users to build and distribute full applications in compact files called *images*. When these images are built and run on a machine, they become containers: isolated environments with their own resources to accomplish a task or provide a service.
 
 ### How does this all work?
-The common thread in every Docker image is the **Dockerfile**. This file is nothing more than a text document that provides commands and configuration inctructions for loading and installing relevant programs, tools, and files needed to successfully build and run the Docker image. These items are known as **dependencies**. Think of the Dockerfile like a chocolate chip cookie recipe: all of the necessary programs and commands (dependencies!) are the ingredients, and they are executed in order from top to bottom according to the instructions on each line of the Dockerfile. When all of these steps are performed using all of these ingredients, the end result is a ~~fresh batch of chocolate chip cookies~~ Docker image! Here's an example of a Dockerfile:
+The common thread in every Docker image is the **Dockerfile**. This file is nothing more than a text document that provides commands and configuration inctructions for loading and installing relevant programs, tools, and files needed to successfully build and run the Docker image. A command could be to install a package, make a new database, or pass a variable. These items are known as **dependencies**. Think of the Dockerfile like a chocolate chip cookie recipe: all of the necessary programs and commands (dependencies!) are the ingredients, and they are executed in order from top to bottom according to the instructions on each line of the Dockerfile. When all of these steps are performed using all of these ingredients, the end result is a ~~fresh batch of chocolate chip cookies~~ Docker image! Here's an example of a Dockerfile:
 
 ![](https://github.com/sandbornm/HardenDocker/blob/master/assets/An-example-of-dockerfile.png)
 
@@ -48,40 +48,43 @@ So what does the Linux kernel have to do with Docker?
 
 Docker takes advantage of the Linux kernel in a special way to provide containerization to the user. The most important of these properties is the idea of a **shared kernel architecture**. This means that Docker containers *share* the kernel of the host operating system. This is part of what makes Docker containers so lightweight and efficient. They share the core resources with the machine that has the container. Luckily, there are a few mechanisms in place to ensure that a Docker container does not have unrestricted access to the kernel and the kernel does not have unrestricted access to the container.
 
-### Default security mechanisms
-1. namespaces provide the layer of isolation between the Docker container and the Linux kernel. A **namespace** specifies kernel resources to which a set of processes has access. A Docker container has a set of namespaces to provide isolation between other containers and the rest of the kernel. This narrows the permissions of a container in several different places:
+### Security mechanisms
+1. Namespaces provide the layer of isolation between the Docker container and the Linux kernel. A **namespace** specifies kernel resources to which a set of processes has access. In other words, a namespace limits what some group of processes can "see" in the kernel. If a group of processes can't "see" something, they can't use it. A namespace can be thought of as a *key*: a container can only access resources to which it has the key, or namespace, and nothing else. The set of namespaces provides isolation between a given container, other containers, and the rest of the kernel and gives a single container the illusion of having total access to the kernel (because it can't see what else has access to it). Namespaces exist for several areas of the kernel:
 
-* PID (process ID) namespace to isolate processes
-* NET (network) namespace to control network interfaces
-* IPC (interprocess communication) to manage access to shared resources between processes
-* MNT (mount) namespace to manage filesystem mount points (a **filesystem** controls how data is stored and retrieved, a **mount point** is a directory to access files and folders on disk)
-* UTS (Unix time sharing) namespace isolates the data that identifies the kernel and version
+* PID (process ID) namespace: isolates processes
+* NET (network) namespace: controls network interfaces
+* IPC (interprocess communication) namespace: manages access to shared resources between processes
+* MNT (mount) namespace: manages filesystem mount points (a **filesystem** controls how data is stored and retrieved, a **mount point** is a directory to access files and folders on disk)
+* UTS (Unix time sharing) namespace: isolates the data that identifies the kernel and version
 
-All of these namespaces work together to basically ensure that there is mutual respect between the kernel and the container, and they strictly define what is shared between the two entities.
+All of these namespaces work together to ensure that there is mutual respect or boundaries between the kernel and the container, and they strictly define the resources that are shared between the two entities.
 
-2. control groups
+2. Control groups provide a layer of access control to the Docker container to access the host operating system and vice versa. A **control group** or **cgroup** allows resources like CPU time, memory, and network access to be allocated across running processes. Cgroups can be configured, monitored, and modified to change *how much* of a certain resource can be used by a container. A control group can be thought of as an *accountant* for the kernel's resources: the control group must keep track of how the resources are being used and allocated, ensure that containers are not promised more  than the available resources, and ensure that no one container hogs all the kernel resources. 
 
-3. UnionFS 
+4. Docker containers each have their own network interface which means they don't have access to the network interfaces (ports, addresses, etc.) of other containers. Containers can interact via their network interfaces only after exchanging permission through the host. Once this is accomplished, containers can send packets (pieces of information) and establish connections.
 
-4. network interface
+These security mechanisms all work together to ensure that containers have appropriate kernel resource access and visibility, and that a given container plays nicely with other containers (if any) and the host machine.
 
-### daemons and clients and engines ~~(Oh my!)~~
+To coordinate the actions of a Docker container and to interact with a single container or multiple other containers, there are a few tools in place
+
+### engines and daemons and clients ~~(Oh my!)~~
 docker daemon
 docker client
 docker engine
 
 ### Structure of a Docker containers
+Secure by default
 Well isolated by default- ability to control level of isolation from network, storage, or other subsystems from other images and/or host machine. 
 
 containers are generally small not many entry points
 
-## Understanding how Docker containers are compromised
-
-### Common error patterns
+## How are Docker containers compromised?
 
 ### HUMANS
 
-### Exploits
+### Common vulnerabilities
+
+### Known exploits
 
 attack surface of the docker daemon
 runC root access remote execution
@@ -99,12 +102,14 @@ automate scanning of containers
 
 ## Interpreting feedback and some examples
 
-### Some jargon
-
 ### Insecure vs. Secure containers
 
 ## Appendix
 
+### Some jargon
+
+### Docker scanning resources
+ 
 ### Sources
 https://resources.whitesourcesoftware.com/blog-whitesource/container-security-scanning
 https://geekflare.com/docker-architecture/
@@ -112,8 +117,7 @@ https://docs.docker.com/engine/security/security/
 https://sysdig.com/blog/docker-image-scanning/
 https://www.redhat.com/en/topics/linux/what-is-the-linux-kernel
 https://medium.com/@nagarwal/understanding-the-docker-internals-7ccb052ce9fe
-
-### Additional info
+https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/resource_management_guide/ch01#sec-How_Control_Groups_Are_Organized
 
 ### How to set up a Docker sandbox
 
