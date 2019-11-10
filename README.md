@@ -48,6 +48,8 @@ So what does the Linux kernel have to do with Docker?
 
 Docker takes advantage of the Linux kernel in a special way to provide containerization to the user. The most important of these properties is the idea of a **shared kernel architecture**. This means that Docker containers *share* the kernel of the host operating system. This is part of what makes Docker containers so lightweight and efficient. They share the core resources with the machine that has the container. Luckily, there are a few mechanisms in place to ensure that a Docker container does not have unrestricted access to the kernel and the kernel does not have unrestricted access to the container.
 
+![](https://github.com/sandbornm/HardenDocker/blob/master/assets/docker-and-kernel.png)
+
 ### Security mechanisms
 1. Namespaces provide the layer of isolation between the Docker container and the Linux kernel. A **namespace** specifies kernel resources to which a set of processes has access. In other words, a namespace limits what some group of processes can "see" in the kernel. If a group of processes can't "see" something, they can't use it. A namespace can be thought of as a *key*: a container can only access resources to which it has the key, or namespace, and nothing else. The set of namespaces provides isolation between a given container, other containers, and the rest of the kernel and gives a single container the illusion of having total access to the kernel (because it can't see what else has access to it). Namespaces exist for several areas of the kernel:
 
