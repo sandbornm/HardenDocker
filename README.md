@@ -51,7 +51,8 @@ Docker takes advantage of the Linux kernel in a special way to provide container
 ![](https://github.com/sandbornm/HardenDocker/blob/master/assets/docker-and-kernel.jpg)
 
 ### Security mechanisms
-1. Namespaces provide the layer of isolation between the Docker container and the Linux kernel. A **namespace** specifies kernel resources to which a set of processes has access. In other words, a namespace limits what some group of processes can "see" in the kernel. If a group of processes can't "see" something, they can't use it. A namespace can be thought of as a *key*: a container can only access resources to which it has the key, or namespace, and nothing else. The set of namespaces provides isolation between a given container, other containers, and the rest of the kernel and gives a single container the illusion of having total access to the kernel (because it can't see what else has access to it). Namespaces exist for several areas of the kernel:
+#### Namespaces
+1. namespaces provide the layer of isolation between the Docker container and the Linux kernel. A **namespace** specifies kernel resources to which a set of processes has access. In other words, a namespace limits what some group of processes can "see" in the kernel. If a group of processes can't "see" something, they can't use it. A namespace can be thought of as a *key*: a container can only access resources to which it has the key, or namespace, and nothing else. The set of namespaces provides isolation between a given container, other containers, and the rest of the kernel and gives a single container the illusion of having total access to the kernel (because it can't see what else has access to it). Namespaces exist for several areas of the kernel:
 
 * PID (process ID) namespace: isolates processes
 * NET (network) namespace: controls network interfaces
@@ -61,20 +62,27 @@ Docker takes advantage of the Linux kernel in a special way to provide container
 
 All of these namespaces work together to ensure that there is mutual respect or boundaries between the kernel and the container, and they strictly define the resources that are shared between the two entities.
 
+#### Control groups
 2. Control groups provide a layer of access control to the Docker container to access the host operating system and vice versa. A **control group** or **cgroup** allows resources like CPU time, memory, and network access to be allocated across running processes. Cgroups can be configured, monitored, and modified to change *how much* of a certain resource can be used by a container. A control group can be thought of as an *accountant* for the kernel's resources: the control group must keep track of how the resources are being used and allocated, ensure that containers are not promised more  than the available resources, and ensure that no one container hogs all the kernel resources. 
 
-4. Docker containers each have their own network interface which means they don't have access to the network interfaces (ports, addresses, etc.) of other containers. Containers can interact via their network interfaces only after exchanging permission through the host. Once this is accomplished, containers can send packets (pieces of information) and establish connections.
+#### Network interfaces
+3. Docker containers each have their own network interface which means they don't have access to the network interfaces (ports, addresses, etc.) of other containers. Containers can interact via their network interfaces only after exchanging permission through the host. Once this is accomplished, containers can send packets (pieces of information) and establish connections.
 
 These security mechanisms all work together to ensure that containers have appropriate kernel resource access and visibility, and that a given container plays nicely with other containers (if any) and the host machine.
 
-To coordinate the actions of a Docker container and to interact with a single container or multiple other containers, there are a few tools in place
+To coordinate the actions of a Docker container and to interact with a single container or multiple other containers, there are a several important tools to understand before examining Docker vulnerabilities and container hardening...
 
 ### engines and daemons and clients ~~(Oh my!)~~
-docker daemon
-docker client
+#### Docker engine
 docker engine
 
-### Structure of a Docker containers
+#### Docker daemon
+docker daemon
+
+#### Docker client
+docker client
+
+### Structure of a Docker container
 Secure by default
 Well isolated by default- ability to control level of isolation from network, storage, or other subsystems from other images and/or host machine. 
 
