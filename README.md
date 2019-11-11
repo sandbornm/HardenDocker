@@ -66,7 +66,7 @@ All of these namespaces work together to ensure that there is mutual respect or 
 2. Control groups provide a layer of access control to the Docker container to access the host operating system and vice versa. A **control group** or **cgroup** allows resources like CPU time, memory, and network access to be allocated across running processes. Cgroups can be configured, monitored, and modified to change *how much* of a certain resource can be used by a container. A control group can be thought of as an *accountant* for the kernel's resources: the control group must keep track of how the resources are being used and allocated, ensure that containers are not promised more  than the available resources, and ensure that no one container hogs all the kernel resources. 
 
 #### Network interfaces
-3. Docker containers each have their own network interface which means they don't have access to the network interfaces (ports, addresses, etc.) of other containers. Containers can interact via their network interfaces only after exchanging permission through the host. Once this is accomplished, containers can send packets (pieces of information) and establish connections.
+3. Docker containers each have their own network interface which means they don't have access to the network interfaces (ports, addresses, etc.) of other containers. Containers can interact via their network interfaces only after exchanging permission through the host. Once this is accomplished, containers can send packets (pieces of information) and establish connections with other containers or applications.
 
 These security mechanisms all work together to ensure that containers have appropriate kernel resource access and visibility, and that a given container plays nicely with other containers (if any) and the host machine.
 
@@ -74,25 +74,35 @@ To coordinate the actions of a Docker container and to interact with a single co
 
 ### engines and daemons and clients ~~(Oh my!)~~
 #### Docker engine
-docker engine
+The Docker engine is simply an application with a client, a server, and an Application Programming Interface (API). In other words, the Docker engine has a client to make requests, a server that grants those requests (if possible) and an API to carry out those requests by possibly communicating with other Docker engines or containers. The Docker daemon listens for requests and is considered the server component of the engine, and the client provides an interface for users to make requests to be completed by the daemon. The API specifies programs and actions that are useful to direct the daemon on how to fulfill requests from the client. These 3 main components make Docker possible. 
 
 #### Docker daemon
-docker daemon
+First, let's take a look at what a **daemon** is: a daemon is nothing more than a computer process that runs in the background. What good does this do? It allows for a program to handle requests automatically by *listening* for them so a user does not have to manually handle them. Daemons are used widely in operating systems for establishing internet connections and protocols, providing ssh connectivity, and scheduling tasks.
+
+The Docker **daemon** simply listens for requests and also manages Docker images and containers. The Docker daemon can also coordinate with other Docker daemons to provide Docker services to a number of Docker containers. This facilitates scalability and consistency across multiple containers.
 
 #### Docker client
-docker client
+The Docker **client** communicates user input commands to the Docker daemon which then executes the commands to modify, connect, or interact with another Docker container. This is achieved with the Docker API. The client is also able to communicate with more than one Docker daemon, making it possible to complete multiple tasks on different containers using the same client. The client is involved any time a user enters a command prefaced with `docker` into a command line such as a terminal or shell. The client makes it possible to easily manipulate and interact with Docker containers after they are created.
 
-### Structure of a Docker container
+### Default Security of a Docker container
+
+Now that we know all of the main components that support Docker, let's examine exactly what a Docker container looks like before unpacking common vulnerabilities in Docker containers. 
+
 Secure by default
 Well isolated by default- ability to control level of isolation from network, storage, or other subsystems from other images and/or host machine. 
 
 containers are generally small not many entry points
 
 ## How are Docker containers compromised?
-
-### HUMANS
+docker daemon with root
+Humans
+Exposed information
 
 ### Common vulnerabilities
+vulnerabilites in container images
+hard coding credentials
+injecting with root access
+lateral network movement 
 
 ### Known exploits
 
@@ -105,10 +115,17 @@ runC root access remote execution
 Docker content trust
 do not use root access
 automate scanning of containers
+daemon config
+COPY vs ADD
+only install verified and necessary packages
 
-### Automate, Automate, Automate
 
 ### Scanning software
+
+content trust, apparmor, SElinux, GRSEC, docker bench security
+
+### Monitoring software
+Scout, Datadog, Prometheus
 
 ## Interpreting feedback and some examples
 
@@ -128,6 +145,10 @@ https://sysdig.com/blog/docker-image-scanning/
 https://www.redhat.com/en/topics/linux/what-is-the-linux-kernel
 https://medium.com/@nagarwal/understanding-the-docker-internals-7ccb052ce9fe
 https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/resource_management_guide/ch01#sec-How_Control_Groups_Are_Organized
+https://docs.docker.com/engine/docker-overview/
+https://en.wikipedia.org/wiki/Daemon_(computing)
+https://medium.com/intive-developers/hardening-docker-quick-tips-54ca9c283964
+https://blog.aquasec.com/docker-security-best-practices
 
 ### How to set up a Docker sandbox
 
