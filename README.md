@@ -50,7 +50,7 @@ Docker takes advantage of the Linux kernel in a special way to provide container
 
 ![](https://github.com/sandbornm/HardenDocker/blob/master/assets/docker-and-kernel.jpg)
 
-### Security mechanisms
+### Default Security mechanisms
 #### Namespaces
 1. namespaces provide the layer of isolation between the Docker container and the Linux kernel. A **namespace** specifies kernel resources to which a set of processes has access. In other words, a namespace limits what some group of processes can "see" in the kernel. If a group of processes can't "see" something, they can't use it. A namespace can be thought of as a *key*: a container can only access resources to which it has the key, or namespace, and nothing else. The set of namespaces provides isolation between a given container, other containers, and the rest of the kernel and gives a single container the illusion of having total access to the kernel (because it can't see what else has access to it). Namespaces exist for several areas of the kernel:
 
@@ -62,11 +62,16 @@ Docker takes advantage of the Linux kernel in a special way to provide container
 
 All of these namespaces work together to ensure that there is mutual respect or boundaries between the kernel and the container, and they strictly define the resources that are shared between the two entities.
 
-#### Control groups
+#### Control groups (cgroups)
 2. Control groups provide a layer of access control to the Docker container to access the host operating system and vice versa. A **control group** or **cgroup** allows resources like CPU time, memory, and network access to be allocated across running processes. Cgroups can be configured, monitored, and modified to change *how much* of a certain resource can be used by a container. A control group can be thought of as an *accountant* for the kernel's resources: the control group must keep track of how the resources are being used and allocated, ensure that containers are not promised more  than the available resources, and ensure that no one container hogs all the kernel resources. 
+
+reduce attack surface by restricting access to physical devices on the host- no access by default
 
 #### Network interfaces
 3. Docker containers each have their own network interface which means they don't have access to the network interfaces (ports, addresses, etc.) of other containers. Containers can interact via their network interfaces only after exchanging permission through the host. Once this is accomplished, containers can send packets (pieces of information) and establish connections with other containers or applications.
+
+#### Secure Computing Mode (Seccomp)
+4. This is a Linux kernel feature that allows the administrator to restrict the actions available within a container- restricts the actions that a container can take on the host system. 
 
 These security mechanisms all work together to ensure that containers have appropriate kernel resource access and visibility, and that a given container plays nicely with other containers (if any) and the host machine.
 
@@ -84,14 +89,11 @@ The Docker **daemon** simply listens for requests and also manages Docker images
 #### Docker client
 The Docker **client** communicates user input commands to the Docker daemon which then executes the commands to modify, connect, or interact with another Docker container. This is achieved with the Docker API. The client is also able to communicate with more than one Docker daemon, making it possible to complete multiple tasks on different containers using the same client. The client is involved any time a user enters a command prefaced with `docker` into a command line such as a terminal or shell. The client makes it possible to easily manipulate and interact with Docker containers after they are created.
 
-### Default Security of a Docker container
+One of the attractive things about containerization technology like Docker is that containers provide a layer of isolation from the host machine and operating system whcih provides an additional security for the resources of the host and the container itself. These default features are made possible by the combination of *namespaces*, *crgoups*, and *network interfaces*.
 
-Now that we know all of the main components that support Docker, let's examine exactly what a Docker container looks like before unpacking common vulnerabilities in Docker containers. 
 
-Secure by default
-Well isolated by default- ability to control level of isolation from network, storage, or other subsystems from other images and/or host machine. 
 
-containers are generally small not many entry points
+As we have seen, Docker containers have many default settings and configurations out of the box that provide a reasonable level of security to containers and hosts- but this is not always enough. In the next sections, we will examine how exactly Docker containers are compromised- from the command line to misconfigurations to large entry points in the Docker image itself.
 
 ## How are Docker containers compromised?
 docker daemon with root
@@ -103,9 +105,15 @@ vulnerabilites in container images
 hard coding credentials
 injecting with root access
 lateral network movement 
+out of date software
+exposure to insecure networks
+large base images
+weak application security
+exposure of hardware resources
+
+base seccomp not implemented as a whitelist
 
 ### Known exploits
-
 attack surface of the docker daemon
 runC root access remote execution
 
@@ -118,7 +126,10 @@ automate scanning of containers
 daemon config
 COPY vs ADD
 only install verified and necessary packages
+Run GRSEC and PAX
 
+For Dockerfiles
+https://docs.docker.com/develop/develop-images/dockerfile_best-practices/
 
 ### Scanning software
 
@@ -149,6 +160,7 @@ https://docs.docker.com/engine/docker-overview/
 https://en.wikipedia.org/wiki/Daemon_(computing)
 https://medium.com/intive-developers/hardening-docker-quick-tips-54ca9c283964
 https://blog.aquasec.com/docker-security-best-practices
+https://www.docker.com/sites/default/files/WP_IntrotoContainerSecurity_08.19.2016.pdf
 
 ### How to set up a Docker sandbox
 
