@@ -143,7 +143,7 @@ Related to this- like classes in Object-Oriented Programming, Docker images shou
 
 Avoiding `root` access in your Docker container minimizes the chances of an attacker accessing host resources through the Docker container. To avoid `root` access in your Docker container, create a **low-privilege** user for then the Docker container is running. In the Dockerfile, create a low-privilege user with the following commands:
 
-`RUN adduser -D low_privilege_user`  // add this user
+`RUN adduser -D low_privilege_user`  // add this user  
 `USER low_privilege_user`            // use this user in container
 
 Then when running your Docker container, specify this user:
