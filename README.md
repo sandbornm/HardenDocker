@@ -91,63 +91,95 @@ The Docker **client** communicates user input commands to the Docker daemon whic
 
 One of the attractive things about containerization technology like Docker is that containers provide a layer of isolation from the host machine and operating system whcih provides an additional security for the resources of the host and the container itself. These default features are made possible by the combination of *namespaces*, *crgoups*, and *network interfaces*.
 
-
-
 As we have seen, Docker containers have many default settings and configurations out of the box that provide a reasonable level of security to containers and hosts- but this is not always enough. In the next sections, we will examine how exactly Docker containers are compromised- from the command line to misconfigurations to large entry points in the Docker image itself.
 
 ## How are Docker containers compromised?
-docker daemon with root
-Humans
-Exposed information
+
+As with many software systems, us humans tend to expose unnecessary information or include extraneous items in our systems that can ultimately lead to the compromise of a system to some extent. Docker images are no different!
+
+Exposed credentials leave Docker containers vulnerable to attack via the entry point exposed by the credentials
+
+Obsolete packages or services specified in the Dockerfile are susceptible to attackers exploiting deprecated dependenices
+
+Failure to secure network privileges allows attackers to infiltrate a Docker container via its network stack (also: Docker containers don't play nicely with traditional firewalls which keep a list of rules in an `iptable` to discern malicious and friendly connections. This means it's that much more important to understand default network configurations on your Docker image!)
+
+With these human mistakes in mind, we turn our attention to fundamental vulnerabilities in Docker containers that can be facilitated by human error.
 
 ### Common vulnerabilities
+
+**runC** vulnerability [CVE-2019-5736]:
+
+**util.c** vulnerability [CVE-2018-9862]:
+
+
+
 vulnerabilites in container images
-hard coding credentials
 injecting with root access
 lateral network movement 
-out of date software
 exposure to insecure networks
-large base images
-weak application security
 exposure of hardware resources
 
-base seccomp not implemented as a whitelist
-
-### Known exploits
-attack surface of the docker daemon
-runC root access remote execution
-
-## Docker security and tools to audit and harden your Docker images
+## How to audit and harden your Docker images
 
 ### Best practices
-Docker content trust
-do not use root access
-automate scanning of containers
-daemon config
-COPY vs ADD
-only install verified and necessary packages
-Run GRSEC and PAX
 
-For Dockerfiles
-https://docs.docker.com/develop/develop-images/dockerfile_best-practices/
+#### Dockerfiles
+
+**`COPY` vs `ADD`**
+
+The `COPY`instruction takes only 2 parameters: a `src` and a `destination`. In other words, only files that are in a local file or directory on the *host* system can be placed into the Docker image.
+
+On the other hand, `ADD` allows the same functionality as `COPY`, with the *additional* capability of a remote URL and also extracting a `.tar` file directly into the Docker image. For obvious reasons, we don't want this capability near our Dockerfile, as it increases the attack surface of our image.
+
+**`RUN`**
+
+Always combine the `RUN`instruction with `apt-get update` and `apt-get install` to ensure the latest updates and packages are installed.
+
+Only install *verified* and *necessary* packages: you should always be asking: "What is the bare minimum that I need for my Docker container to run as expected?" Include no more than needed in the Dockerfile!
+
+Related to this- like classes in Object-Oriented Programming, Docker images should be decoupled from one another- best practice is to use Docker containers for small services to facilitate reuse and interdependency. 
+
+#### Avoid `root` access
+
+Avoiding `root` access in your Docker container minimizes the chances of an attacker accessing host resources through the Docker container. To avoid `root` access in your Docker container, create a **low-privilege** user for then the Docker container is running. In the Dockerfile, create a low-privilege user with the following commands:
+
+`RUN adduser -D low_privilege_user`  // add this user
+`USER low_privilege_user`            // use this user in container
+
+Then when running your Docker container, specify this user:
+
+`docker run -u low_privilege_user`
+
+Use such a user to minimize access to host resources.
+
+#### Content trust
+
+Docker Content Trust (DCT) allows a user of a Docker container to verify the integrity of incoming or outgoing data or the true author of a given docker image. This is accomplished with digital signatures which uses math to make a special string that represents a piece of raw data (including large files). Setting up DCT is a great way to assert the origin of certain assets for your Docker containers.
+
+#### (Optional) Consider Alpine Linux
+
+
 
 ### Scanning software
 
-content trust, apparmor, SElinux, GRSEC, docker bench security
+#### First, how do container scanners work?
+
+
+
+content trust
+apparmor
+SElinux
+GRSEC
+docker bench security
+Stackrox
 
 ### Monitoring software
 Scout, Datadog, Prometheus
 
-## Interpreting feedback and some examples
+### Bench Security and Content Trust Walkthrough 
 
-### Insecure vs. Secure containers
+https://www.digitalocean.com/community/tutorials/how-to-audit-docker-host-security-with-docker-bench-for-security-on-ubuntu-16-04#step-1-%E2%80%94-installing-docker-bench-security
 
-## Appendix
-
-### Some jargon
-
-### Docker scanning resources
- 
 ### Sources
 https://resources.whitesourcesoftware.com/blog-whitesource/container-security-scanning
 https://geekflare.com/docker-architecture/
@@ -156,12 +188,7 @@ https://sysdig.com/blog/docker-image-scanning/
 https://www.redhat.com/en/topics/linux/what-is-the-linux-kernel
 https://medium.com/@nagarwal/understanding-the-docker-internals-7ccb052ce9fe
 https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/resource_management_guide/ch01#sec-How_Control_Groups_Are_Organized
-https://docs.docker.com/engine/docker-overview/
-https://en.wikipedia.org/wiki/Daemon_(computing)
+
 https://medium.com/intive-developers/hardening-docker-quick-tips-54ca9c283964
 https://blog.aquasec.com/docker-security-best-practices
 https://www.docker.com/sites/default/files/WP_IntrotoContainerSecurity_08.19.2016.pdf
-
-### How to set up a Docker sandbox
-
-
