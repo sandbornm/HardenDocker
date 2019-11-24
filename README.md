@@ -1,6 +1,6 @@
-# A tutorial on Docker and Docker security for *beginners*: How to harden your Docker image
+# A tutorial on security for *beginners*: How to harden your Docker image
 
-## Assumptions: readers already have Docker Desktop and Docker CLI tools installed but are not familiar with containerization, how Docker works, or container security.
+## Assumptions: Docker Desktop and Docker CLI tools installed, little to no familiarity with Docker, containerization, or container security.
 
 ## Table of Contents
 ### [How does Docker work and what is an image?](##how-does-docker-work-and-what-is-an-image)
@@ -107,7 +107,11 @@ With these human mistakes in mind, we turn our attention to fundamental vulnerab
 
 ### Common vulnerabilities
 
-**runC** vulnerability [CVE-2019-5736]:
+**runC** vulnerability [CVE-2019-5736]:  
+
+The runC exploit was discovered in at the beginning of 2019 and graded an 8.6/10 (high severity). This exploit leverages mishandling of file descriptors (an indicator to access an I/O medium like a file or socket) in `/proc/self/exe` (a file for handling running processes) in new or existing images. The consequence of this vulnerability is an attacker could execute arbitrary commands with root access. This type of command injection leaves the host machine and its resources in the hands of the attacker (yikes!)
+
+// funny scream image here
 
 **util.c** vulnerability [CVE-2018-9862]:
 
