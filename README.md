@@ -1,9 +1,9 @@
 # A tutorial on Docker and Docker security for *beginners*: How to harden your Docker image
 
-## Assumptions: readers already have Docker Desktop and Docker CLI tools installed but are not familiar with containerization in general, how Docker works, or security practices for containers.
+## Assumptions: readers already have Docker Desktop and Docker CLI tools installed but are not familiar with containerization, how Docker works, or container security.
 
 ## Table of Contents
-### [How does Docker work and what is an image?](##how-does-docker-work-and-what-is-an-image?)
+### [How does Docker work and what is an image?](##how-does-docker-work-and-what-is-an-image)
 ### [Understanding default security configurations](##understanding-default-security-configurations)
 ### [How can the security configuration change?](##understanding-how-docker-containers-are-compromised)
 ### [Tools to audit and harden your Docker images](##tools-to-audit-and-harden-your-docker-images)
@@ -111,19 +111,17 @@ With these human mistakes in mind, we turn our attention to fundamental vulnerab
 
 **util.c** vulnerability [CVE-2018-9862]:
 
-
-
 vulnerabilites in container images
 injecting with root access
 lateral network movement 
 exposure to insecure networks
 exposure of hardware resources
 
-## How to audit and harden your Docker images
+We've seen the turmoil that Docker exploits can stir up, so let's take a look at measures we can take from a defensive standpoint to ensure our Docker containers are as secure as possible...
 
-### Best practices
+## Best practices for your Docker Images
 
-#### Dockerfiles
+### Dockerfiles
 
 **`COPY` vs `ADD`**
 
@@ -139,7 +137,7 @@ Only install *verified* and *necessary* packages: you should always be asking: "
 
 Related to this- like classes in Object-Oriented Programming, Docker images should be decoupled from one another- best practice is to use Docker containers for small services to facilitate reuse and interdependency. 
 
-#### Avoid `root` access
+### Avoid `root` access
 
 Avoiding `root` access in your Docker container minimizes the chances of an attacker accessing host resources through the Docker container. To avoid `root` access in your Docker container, create a **low-privilege** user for then the Docker container is running. In the Dockerfile, create a low-privilege user with the following commands:
 
@@ -152,31 +150,33 @@ Then when running your Docker container, specify this user:
 
 Use such a user to minimize access to host resources.
 
-#### Content trust
+### Content trust
 
 Docker Content Trust (DCT) allows a user of a Docker container to verify the integrity of incoming or outgoing data or the true author of a given docker image. This is accomplished with digital signatures which uses math to make a special string that represents a piece of raw data (including large files). Setting up DCT is a great way to assert the origin of certain assets for your Docker containers.
 
-#### (Optional) Consider Alpine Linux
+### (Another) Linux aside
+
+Alpine Linux is a distribution of Linux known for its portability and security, making it a great pairing with Docker. For comparison, the minimal installation of Ubunutu (a popular distro of linux) requires just under 4GB of disk space. On the other hand, the minimal installation of Alpine requires right around 130MB. There are also security mechanisms such as stack smashing protection and Position Independent Executables (PIEs) in place to thwart large categories of vulnerabilities. Check out https://alpinelinux.org/about/ for more on Alpine Linux.
+
+Let's continue to add to our defense toolkit by unpacking some scanning and monitoring software for your Docker containers...
+
+## Hardening your Docker images 
+
+### How do container scanners work?
 
 
 
-### Scanning software
+### Scanning
 
-#### First, how do container scanners work?
-
-
-
-content trust
 apparmor
 SElinux
-GRSEC
 docker bench security
 Stackrox
 
-### Monitoring software
+### Monitoring 
 Scout, Datadog, Prometheus
 
-### Bench Security and Content Trust Walkthrough 
+### Bench Security Setup 
 
 https://www.digitalocean.com/community/tutorials/how-to-audit-docker-host-security-with-docker-bench-for-security-on-ubuntu-16-04#step-1-%E2%80%94-installing-docker-bench-security
 
