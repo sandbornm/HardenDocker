@@ -95,31 +95,40 @@ As we have seen, Docker containers have many default settings and configurations
 
 ## How are Docker containers compromised?
 
-As with many software systems, us humans tend to expose unnecessary information or include extraneous items in our systems that can ultimately lead to the compromise of a system to some extent. Docker images are no different!
+As with many software systems, humans tend to expose unnecessary information or include extraneous items in our systems that can ultimately lead to the compromise of a system to some extent. Docker images are no different! Here is a totally not comprehensive list outlining a few ways Docker images are compromised: 
 
-Exposed credentials leave Docker containers vulnerable to attack via the entry point exposed by the credentials
-
+* Exposed credentials: leave Docker containers vulnerable to attack via the entry point exposed by the credentials,
 Obsolete packages or services specified in the Dockerfile are susceptible to attackers exploiting deprecated dependenices
 
-Failure to secure network privileges allows attackers to infiltrate a Docker container via its network stack (also: Docker containers don't play nicely with traditional firewalls which keep a list of rules in an `iptable` to discern malicious and friendly connections. This means it's that much more important to understand default network configurations on your Docker image!)
+* Failure to secure network privileges: this allows attackers to infiltrate a Docker container via its network stack (also: Docker containers don't play nicely with traditional firewalls which keep a list of rules in an `iptable` to discern malicious and friendly connections. This means it's that much more important to understand default network configurations on your Docker image!)
 
-With these human mistakes in mind, we turn our attention to fundamental vulnerabilities in Docker containers that can be facilitated by human error.
+* Failure to adequately audit dependencies: including dependencies or images pulled from open source repositories guarantees nothing about the safety of your own Docker containers! It's important to understand the implications of using certain dependencies and keeping them up-to-date and monitoring their vulnerabilities.
 
-### Common vulnerabilities
+With these human mistakes in mind, we turn our attention to a few fundamental vulnerabilities in Docker containers that are facilitated by human error...
+
+### Known vulnerabilities
 
 **runC** vulnerability [CVE-2019-5736]:  
 
-The runC exploit was discovered in at the beginning of 2019 and graded an 8.6/10 (high severity). This exploit leverages mishandling of file descriptors (an indicator to access an I/O medium like a file or socket) in `/proc/self/exe` (a file for handling running processes) in new or existing images. The consequence of this vulnerability is an attacker could execute arbitrary commands with root access. This type of command injection leaves the host machine and its resources in the hands of the attacker (yikes!)
+The runC exploit was discovered in at the beginning of 2019 and scored 8.6/10 (high severity) on the CVSS (common vulnerability scoring system). This exploit leverages mishandling of file descriptors (an indicator to access an I/O medium like a file or socket) in `/proc/self/exe` (a file for handling running processes) in new or existing images. The runC is an executable that runs in background when Docker starts up to manage running containers. The file descriptor mishandling allows the executable to be overwritten with another executable specified by the attacker i.e. an attacker could execute arbitrary commands with root access. This type of command injection leaves the host machine and its resources in the hands of the attacker (yikes!)
 
 // funny scream image here
 
 **util.c** vulnerability [CVE-2018-9862]:
 
-vulnerabilites in container images
-injecting with root access
-lateral network movement 
-exposure to insecure networks
-exposure of hardware resources
+The util.c exploit was discovered in early 2018 and scored 7.8/10 (high) on the CVSS. This exploit leverages the mishandling of a numeric username which grants attackers root access when they use a specific value on a line in the `etc/passwd` file (text file containing attributed of each user, accessible to unprivileged users). While in a Docker container, an attacker can run `docker exec -u` and pass the numeric username value to obtian root access and impose its will on the compromised Docker container. (yikes again!)
+
+// /etc/passwd file
+
+**Misconfigurations** in root accounts
+
+On multiple occasions, containers have been found on DockerHub (think Github for Docker images) with root accounts that had blank passwords! This allows root access to modify the container to anyone who downloads the container from DockerHub. Misconfigurations like these are often overlooked and easily prevented by fortifying role-based access control (RBAC).
+
+**Lateral network movement
+
+
+
+
 
 We've seen the turmoil that Docker exploits can stir up, so let's take a look at measures we can take from a defensive standpoint to ensure our Docker containers are as secure as possible...
 
@@ -185,14 +194,13 @@ Scout, Datadog, Prometheus
 https://www.digitalocean.com/community/tutorials/how-to-audit-docker-host-security-with-docker-bench-for-security-on-ubuntu-16-04#step-1-%E2%80%94-installing-docker-bench-security
 
 ### Sources
-https://resources.whitesourcesoftware.com/blog-whitesource/container-security-scanning
-https://geekflare.com/docker-architecture/
-https://docs.docker.com/engine/security/security/
-https://sysdig.com/blog/docker-image-scanning/
-https://www.redhat.com/en/topics/linux/what-is-the-linux-kernel
-https://medium.com/@nagarwal/understanding-the-docker-internals-7ccb052ce9fe
-https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/resource_management_guide/ch01#sec-How_Control_Groups_Are_Organized
-
-https://medium.com/intive-developers/hardening-docker-quick-tips-54ca9c283964
-https://blog.aquasec.com/docker-security-best-practices
-https://www.docker.com/sites/default/files/WP_IntrotoContainerSecurity_08.19.2016.pdf
+https://resources.whitesourcesoftware.com/blog-whitesource/container-security-scanning  
+https://geekflare.com/docker-architecture/  
+https://docs.docker.com/engine/security/security/  
+https://sysdig.com/blog/docker-image-scanning/  
+https://www.redhat.com/en/topics/linux/what-is-the-linux-kernel  
+https://medium.com/@nagarwal/understanding-the-docker-internals-7ccb052ce9fe  
+https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/resource_management_guide/ch01#sec-How_Control_Groups_Are_Organized  
+https://medium.com/intive-developers/hardening-docker-quick-tips-54ca9c283964  
+https://blog.aquasec.com/docker-security-best-practices  
+https://www.docker.com/sites/default/files/WP_IntrotoContainerSecurity_08.19.2016.pdf  
