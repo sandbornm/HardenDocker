@@ -2,7 +2,7 @@
   <img width="460" height="420" src="https://github.com/sandbornm/HardenDocker/blob/master/assets/hardendock.png">
 </p>
 
-# A tutorial on security for *beginners*: How to harden your Docker image
+# How to harden a Docker image: a tutorial for beginners
 
 ## Assumptions: Docker Desktop and Docker CLI tools installed, little to no familiarity with Docker, containerization, or container security.
 
