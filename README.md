@@ -120,6 +120,7 @@ The runC exploit was discovered in at the beginning of 2019 and scored 8.6/10 (h
 The util.c exploit was discovered in early 2018 and scored 7.8/10 (high) on the CVSS. This exploit leverages the mishandling of a numeric username which grants attackers root access when they use a specific value on a line in the `etc/passwd` file (text file containing attributed of each user, accessible to unprivileged users). While in a Docker container, an attacker can run `docker exec -u` and pass the numeric username value to obtian root access and impose its will on the compromised Docker container. (yikes again!)
 
 // /etc/passwd file
+![](https://github.com/sandbornm/HardenDocker/blob/master/assets/etcpasswd.png)
 
 **Misconfigurations** in root accounts
 
