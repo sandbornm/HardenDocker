@@ -3,14 +3,14 @@
 ## Assumptions: Docker Desktop and Docker CLI tools installed, little to no familiarity with Docker, containerization, or container security.
 
 ## Table of Contents
-### [How does Docker work and what is an image?](##how-does-docker-work-and-what-is-an-image)
+### [How does Docker work?](##how-does-docker-work)
 ### [Understanding default security configurations](##understanding-default-security-configurations)
 ### [How can the security configuration change?](##understanding-how-docker-containers-are-compromised)
 ### [Tools to audit and harden your Docker images](##tools-to-audit-and-harden-your-docker-images)
 ### [Interpreting feedback and some examples](##interpreting-feedback-and-some-examples)
 ### [Appendix](##appendix)
 
-## How does Docker work and what is an image?
+## How does Docker work?
 
 ### Introduction
 So, you've decided to use Docker in your programming endeavors. However, you've noticed that the exsiting documentation for Docker is hopelessly esoteric for beginners. Luckily, you've come to the right place: this tutorial will outline Docker as an open-source software, but more importantly, it will discuss the reltaive security implications of Docker images and the steps necessary to audit and "harden" or secure them. A rough overview of Docker is in order to get started:
