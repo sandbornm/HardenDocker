@@ -93,6 +93,8 @@ One of the attractive things about containerization technology like Docker is th
 
 As we have seen, Docker containers have many default settings and configurations out of the box that provide a reasonable level of security to containers and hosts- but this is not always enough. In the next sections, we will examine how exactly Docker containers are compromised- from the command line to misconfigurations to large entry points in the Docker image itself.
 
+![](https://github.com/sandbornm/HardenDocker/blob/master/assets/overview.png)
+
 ## How are Docker containers compromised?
 
 As with many software systems, humans tend to expose unnecessary information or include extraneous items in our systems that can ultimately lead to the compromise of a system to some extent. Docker images are no different! Here is a totally not comprehensive list outlining a few ways Docker images are compromised: 
