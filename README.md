@@ -139,7 +139,7 @@ The util.c exploit was discovered in early 2018 and scored 7.8/10 (high) in the 
 
 On multiple occasions, containers have been found on DockerHub (think Github for Docker images) with root accounts that had blank passwords! This allows root access to modify the container to anyone who downloads the container from DockerHub since the password for `root` access is... nothing. Blank. There's **NO** password. Not good!! Misconfigurations like these are often overlooked and easily prevented by fortifying containers with strict role-based access control (RBAC). This means clearly specifying the access (read/write) privileges of each user on the image. 
 
-**Lateral network movement
+**Lateral network movement**
 
 Just like non-containerized software applications, Docker containers are also susceptible to compromise via lateral network movement. This is when an attacker assumes the identities of various users and attempts to compromise different portions of the Docker image. Different users may have different privileges, allowing the attacker to glean all kinds of information about the Docker image and eventually take over the whole container. This type of attack is especially scary since Docker containers are not protected by traditional firewalls (since they have their own network stack) and because a single Docker host (the machine running Docker) can attack any other host (another machine) on the same network! :scream:
 
