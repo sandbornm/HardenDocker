@@ -196,34 +196,68 @@ While it may not be absolutely necessary, it would be nice to understand how exa
 
 Image scanning software works by parsing Docker image dependencies, i.e. the things in the Dockerfile and anything else in the image that the Dockerfile references, and determining whether any of the dependencies in their current versions have known vulnerabilities that can adversely affect the image being interrogated. Typically, these scanning tools are open source to benefit from the combined collaboration of the community, making the scanners better for everyone. In addition, different scanners have different approaches for identifying vulnerabilities and also for reporting them and providing feedback for the image owner.
 
-It's important to note that no scanning software will identify every possible vulnerability in a Docker image. This is by virtue of the inherent complexity of software as well as the dynamic landscape of software vulnerabilities. These scanners should not be the single line of defense in hardening your docker image! Rather, these scanners should be employed with best practices as well as due diligence in securing the host and resources associated with your Docker image. This is the best you can do to harden your Docker image, and sometimes even all of these measures might not be enough! There is no such thing, in current practice, as 100% secure software. But, you should strive for as close to it as possible!  
+It's important to note that no scanning software will identify every possible vulnerability in a Docker image. This is by virtue of the inherent complexity of software as well as the dynamic landscape of software vulnerabilities. In addition, scanners cannot check for an **unknown** vulnerability! Clearly, these scanners should not be the single line of defense in hardening your docker image! Rather, these scanners should be employed with best practices as well as due diligence in securing the host and resources associated with your Docker image. This is the best you can do to harden your Docker image, and sometimes even all of these measures might not be enough! There is no such thing, in current practice, as 100% secure software. But, you should strive for as close to it as possible!  
 
 ### Scanning tools and highlights
 
-apparmor - linux security module 
-SElinux - open source 
-docker bench security - open source
-Stackrox
-anchore - open source
-clair - open source
+**AppArmor**
+
+AppArmor is a Linux security module that comes built-in to Docker. AppArmor allows the system administrator to specify certain security profiles to be used when certain applications are run on the operating system. AppArmor can detect certain security threats and alert the appropriate user when a threat is detected on a specific profile. In Docker, the default security profile is called `docker-default` and has moderate security. When running a container, a certain security profile can be specified from AppArmor by overriding the `--security-opt` command line arg. Otherwise, the default profile is used to run the container. It would be wise to create and run a Docker container with at least one AppArmor security profile that provides greater security than the `docker-default` profile.
+
+**SELinux**
+
+SElinux (Security-enhanced linux) is an open source project that focuses mainly on protecting the host of a Docker container(s) and protecting multiple Docker containers from each other (isolation). This is achieved by SELinux labels to control access to certain processes. These labels consist specify 4 aspects of a container: user, role, type, and level. In SELinux, Process access is determined by type and level. One form of SELinux protection for Docker is type enforcement. Type enforcement establishes rules based on the type of process running in the container. For example, processes can be separated by read/write access or location. Specifying process access makes it easy to identify when security goes south in your Docker container.
+
+**Docker Bench Security** 
+
+Docker Bench Security is an open source tool that allows a user to scan their Docker image to find vulnerabilities or violations of common best practices in creating and distributing Docker images. The script can be run directly inside of a Docker container using labels. The script provides output that gives feedback including `WARN`, `NOTE`, `INFO`, and `PASS` along with test descriptions to indicate what was being tested. At the end of this tutorial is a walkthrough to set up Docker Bench Security as it is a good (and free) starting point for scanning your Docker images for any violations of best practices.
+
+**StackRox**
+
+Stackrox is a paid, enterprise level container security manager for multiple environments, including Docker. StackRox boasts full lifecycle security of Docker containers and allows for seamless integration with Docker engine and DockerHub. StackRox has the ability to block Docker images with vulnerabilities from being deployed and also supports third-party scanners. This software also provides a network map to monitor how containers are interacting and watches for suspicious activity and can also provide assessments for security standard benchmarks. Finally, StackRox provides runtime protection from threats with automated policy enforcement to take down any images that don't adhere to defined standards or rule whitelists. This is a heavy-duty product for Docker containers at enterprise scale.
+
+**Anchore**
+
+Anchore is an open source project that advertises quick and precise scanning of container images to determine vulnerabilities with easy installation. The scanner itself is packaged as a Docker image to be run on the Docker image under inspection. Anchore advertises its solution as the most comprehensive security inspection platform and checks for known vulnerabilities, exposed credentials, operatinhg system packages, 3rd party libraries, whitelist allowed elements, blacklist sensitive elements, analyzes Dockerfile contents, and identifies config files, file permissions, and unpackaged files. Here is a straighforward walkthrough to try it yourself: https://anchore.com/docker-image-security-in-5-minutes-or-less/
+
+**Clair**
+
+Clair is yet another open source Docker image scanner that aggregates vulnerability data from multiple sources and cross-references them with those scanned in a Docker image. The result of a scan is a list of vulnerabilities that threaten the container. Clair also provides the capability to notify affected containers when upstream vulnerability data changes, and to create responses to such changes programmatically as a response to maintain the security of the Docker image. 
+
+**Tenable** 
+
+Tenable is another paid, enterprise level scanner that advertises its ability to eliminate vulnerabilties early via end-to-end visibility of Docker images with vulnerability assessment, malware detection, and policy enforcement. Highlight features include: automated inspection of each layer of an image, continuous assessment of threats by updating vulnerability data, policy assurance detection via risk threshold violations, runtime security and notification of container modification. Similar to StackRox, Tenable also has an appealing visualization dashboard providing metrics on an image or cluster of images.
+
+Now, on to *monitoring* software... 
+
+### How do container monitors work?
+
+Container monitors work similar to scanners except they work while a Docker image is up and running, i.e. a container (remember?!). While scanners check the contents of an image including its Dockerfile and other dependencies and contents of other locations in the image, a monitor must keep track of everything that happens while a container is interacting with another entity (an orchestrator, another container, multiple containers, etc.). Keeping track of metrics while a container is working and interacting allows a monitor to determine when a container is performing as expected, and when something has gone wrong. In the latter case, good monitoring tools must be able to determine exactly what went wrong and how to fix it in as little time as possible. Monitoring is essential to detect problems in containers as early as possible to mitigate backlash at scale, to conduct updates under a close eye, and to improve container performance by analyzing metrics.
+
+Compared to image scanners, Docker monitors can be considered "active scanners" since they observe Docker containers that are up and running. This doesn't mean monitoring tools are better than scanners, as the same shortcomings as scanners are inevitable.
 
 ### Monitoring tools and highlights
-Scout
-Datadog
-Prometheus
 
-### Bench Security Setup 
+**cAdvisor**
 
-https://www.digitalocean.com/community/tutorials/how-to-audit-docker-host-security-with-docker-bench-for-security-on-ubuntu-16-04#step-1-%E2%80%94-installing-docker-bench-security
+
+**Scout**
+**Datadog**
+**Prometheus**
+**Sysdig**
+**Sensu**
+**Sematext**
+
+### Summary 
+
+Docker is a very powerful software that takes advantage of clever features of the Linux kernel. Docker allows a developer to package applications into lightweight containers for fast and easy deployment. At scale, many containers may be running at any given time working together to complete a task or provide a service. For personal use, Docker may come in handy for an application or a software project. In any case, security should be a top priority. Providing a high level of security to a Docker image is no small task, and hardening a Docker image entails ensuring best practices and scanning relevant components of the image to make sure there are no footholds for attackers to cling to and compromise your Docker image. My hope is this tutorial has sufficiently described the actions that must be taken to ensure your Docker image is as secure as possible, and that you have learned something about containers and software security in general. Use the following checklist if you ever find yourself wondering if you forgot to check or do anything on the quest to secure your Docker image. Happy Hardening! :beers:
 
 ### Checklist
 
-Refer to this checklist to harden your Docker image and prevent it from being pwned:
-
 - [ ] Docker up-to-date?
 - [ ] Content Trust enabled?
-- [ ] Bench Security enabled?
-- [ ] Low privilege user created?
+- [ ] AppArmor non-default security profile enabled?
+- [ ] Minimal privilege user created to build image?
 - [ ] Use `COPY`over `ADD` unless absolutely necessary?
 - [ ] Use `RUN` with `apt-get update && apt-get install`?
 - [ ] Third party scan of Docker image with feedback?
@@ -240,4 +274,7 @@ Refer to this checklist to harden your Docker image and prevent it from being pw
 8. https://medium.com/intive-developers/hardening-docker-quick-tips-54ca9c283964  
 9. https://blog.aquasec.com/docker-security-best-practices  
 10. https://www.docker.com/sites/default/files/WP_IntrotoContainerSecurity_08.19.2016.pdf  
-11. https://resources.whitesourcesoftware.com/blog-whitesource/docker-image-security-scanning
+11. https://resources.whitesourcesoftware.com/blog-whitesource/docker-image-security-scanning  
+12. https://docs.docker.com/engine/security/apparmor/  
+13. https://www.projectatomic.io/docs/docker-and-selinux/  
+14. https://code-maze.com/top-docker-monitoring-tools/  
