@@ -1,13 +1,7 @@
-
-```
-  _    _                  _                _____                _                   
- | |  | |                | |              |  __ \              | |                  
- | |__| |  __ _  _ __  __| |  ___  _ __   | |  | |  ___    ___ | | __ ___  _ __ 
- |  __  | / _` || '__|/ _` | / _ \| '_ \  | |  | | / _ \  / __|| |/ // _ \| '__|    
- | |  | || (_| || |  | (_| ||  __/| | | | | |__| || (_) || (__ |   <|  __/| |       
- |_|  |_| \__,_||_|   \__,_| \___||_| |_| |_____/  \___/  \___||_|\_\\___||_|       
- ```
-                                                               
+<p align="center">
+  <img width="800" height="300" src="https://github.com/sandbornm/HardenDocker/blob/master/assets/banner.png">
+</p>
+                                        
 <p align="center">
   <img width="460" height="420" src="https://github.com/sandbornm/HardenDocker/blob/master/assets/hardendock.png">
 </p>
@@ -98,7 +92,9 @@ First, let's take a look at what a **daemon** is: a daemon is nothing more than 
 
 The Docker **daemon** simply listens for requests and also manages Docker images and containers. The Docker daemon can also coordinate with other Docker daemons to provide Docker services to a number of Docker containers. This facilitates scalability and consistency across multiple containers.
 
-\\daemon image
+<p align="center">
+  <img width="300" height="300" src="https://github.com/sandbornm/HardenDocker/blob/master/assets/daemon.png">
+</p>
 
 #### Docker client
 The Docker **client** communicates user input commands to the Docker daemon which then executes the commands to modify, connect, or interact with another Docker container. This is achieved with the Docker API. The client is also able to communicate with more than one Docker daemon, making it possible to complete multiple tasks on different containers using the same client. The client is involved any time a user enters a command prefaced with `docker` into a command line such as a terminal or shell. The client makes it possible to easily manipulate and interact with Docker containers after they are created.
