@@ -204,9 +204,8 @@ It's important to note that no scanning software will identify every possible vu
 
 AppArmor is a Linux security module that comes built-in to Docker. AppArmor allows the system administrator to specify certain security profiles to be used when certain applications are run on the operating system. AppArmor can detect certain security threats and alert the appropriate user when a threat is detected on a specific profile. In Docker, the default security profile is called `docker-default` and has moderate security. When running a container, a certain security profile can be specified from AppArmor by overriding the `--security-opt` command line arg. Otherwise, the default profile is used to run the container. It would be wise to create and run a Docker container with at least one AppArmor security profile that provides greater security than the `docker-default` profile.
 
-**SELinux**
+**Dagda**
 
-SElinux (Security-enhanced linux) is an open source project that focuses mainly on protecting the host of a Docker container(s) and protecting multiple Docker containers from each other (isolation). This is achieved by SELinux labels to control access to certain processes. These labels consist specify 4 aspects of a container: user, role, type, and level. In SELinux, Process access is determined by type and level. One form of SELinux protection for Docker is type enforcement. Type enforcement establishes rules based on the type of process running in the container. For example, processes can be separated by read/write access or location. Specifying process access makes it easy to identify when security goes south in your Docker container.
 
 **Docker Bench Security** 
 
