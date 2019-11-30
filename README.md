@@ -123,7 +123,11 @@ With these human mistakes in mind, we turn our attention in the next section to 
 
 The runC exploit was discovered at the beginning of 2019 and scored 8.6/10 (high severity) in the CVSS (common vulnerability scoring system). This exploit leverages mishandling of file descriptors (an indicator to access an I/O medium like a file or socket) in `/proc/self/exe` (a file for handling running processes) in new or existing images. The runC is an executable that runs in background when Docker starts up to manage running containers. The file descriptor mishandling allows the executable to be overwritten with another executable specified by the attacker i.e. an attacker could execute arbitrary commands with root access. This type of command injection leaves the host machine and its resources in the hands of the attacker (yikes!)
 
-![](https://github.com/sandbornm/HardenDocker/blob/master/assets/scream.png)
+<p align="center">
+  <img width="360" height="120" src="https://github.com/sandbornm/HardenDocker/blob/master/assets/scream.png">
+</p>
+
+
 
 **util.c** vulnerability [CVE-2018-9862]:
 
