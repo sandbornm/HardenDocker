@@ -6,9 +6,6 @@
  |  __  | / _` || '__|/ _` | / _ \| '_ \  | |  | | / _ \  / __|| |/ // _ \| '__|    
  | |  | || (_| || |  | (_| ||  __/| | | | | |__| || (_) || (__ |   <|  __/| |       
  |_|  |_| \__,_||_|   \__,_| \___||_| |_| |_____/  \___/  \___||_|\_\\___||_|       
-                                                                                
- 
- 
  ```
                                                                
 <p align="center">
@@ -17,7 +14,9 @@
 
 # How to harden a Docker image: a tutorial for beginners
 
-## Table of Contents
+## This tutorial provides a basic overview of Docker and its security mechanisms, discusses best practices for creating Docker containers, and surveys a number of scanning and monitoring software to harden Docker images.
+
+# Table of Contents
 ### [How does Docker work?](##how-does-docker-work)
 ### [Understanding default security configurations](##understanding-default-security-configurations)
 ### [How can the security configuration change?](##understanding-how-docker-containers-are-compromised)
