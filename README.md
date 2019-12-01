@@ -218,6 +218,8 @@ AppArmor is a Linux security module that comes built-in to Docker. AppArmor allo
   <img width="200" height="150" src="https://github.com/sandbornm/HardenDocker/blob/master/assets/dagda.png">
 </p>
 
+Dagda is a powerful open source tool to scan your Docker image for vulnerabilities, trojans, viruses, and malware. Dagda can also monitor the Docker daemon as well as running containers to keep an eye out for suspicious activity. This tool works by aggregating known vulnerabilities from multiple sources into a noSQL database and then checking the database as the image is scanned for bad dependencies, versions, or languages. Dagda also uses antivirus APIs to check for dormant malware in Docker images. Dagda supports multiple operating systems and languages. 
+
 **StackRox**
 
 <p align="center">
@@ -262,13 +264,47 @@ Compared to image scanners, Docker monitors can be considered "active scanners" 
 
 **cAdvisor**
 
+<p align="center">
+  <img width="240" height="80" src="https://github.com/sandbornm/HardenDocker/blob/master/assets/tenable.png">
+</p>
+
+cAdvisor is an open source monitoring tool for Docker backed by Google. The entire tool is a single Docker container that can be run from within the container to monitor and has its own GUI providing statistics of the container in which it's run. cAdvisor can collect and process relevant information from the running containers to determine if anything is amiss in your Docker image. cAdvisor connects directly to the Docker daemon and begins checking resource consumption like CPU and memory usage and Network I/O to detect any suspicious activity. cAdvisor works best with a single Docker host.
 
 **Scout**
+
+<p align="center">
+  <img width="240" height="80" src="https://github.com/sandbornm/HardenDocker/blob/master/assets/tenable.png">
+</p>
+
+Scout is a paid monitoring tool that costs $10 per host. Scout works well with multiple host and maintains data for a long period of time. Similar to cAdvisor, Scout reports metrics related to resource usage, checks for bottlenecks in job queues, and checks performance across multiple Docker deployments. Scout also provides an intuitive UI that makes it easy for the administrator to identify and resolve issues affecting performance and compromised security.
+
 **Datadog**
-**Prometheus**
-**Sysdig**
+
+<p align="center">
+  <img width="240" height="80" src="https://github.com/sandbornm/HardenDocker/blob/master/assets/datado.jpg">
+</p>
+
+Datadog is a full-stack, cloud-based monitoring service that costs $15 per host. Datadog can monitor container environments with ease. Compared with cAdvisor and Scout, Datadog emphasizes very specific metrics of Docker container deployments across multiple hosts which makes it very easy to identify issues and closely monitor running applications. A unique feature of Datadog is to flag specific issues that may come up and automate a response to them for future occurrences, including an alert that the issue has repeated. 
+
 **Sensu**
+
+<p align="center">
+  <img width="240" height="80" src="https://github.com/sandbornm/HardenDocker/blob/master/assets/sensu.png">
+</p>
+
+Sensu is a monitoring system with its own API container on DockerHub that connects with the Sensu server to run as a single container on the host machine. Sensu requires a set of plugins to play nicely with Docker container metrics and status. Sensu also relies on external appplications to launch processes that Sensu needs to work well. These include things such as Sensu API, Sensu Core, Redis, and Graphite. Likely because of all the hassle complexity, Sensu is a free monitoring tool that is highly configurable at the cost of considerable overhead.
+
 **Sematext**
+
+<p align="center">
+  <img width="240" height="80" src="https://github.com/sandbornm/HardenDocker/blob/master/assets/sematext.jpg">
+</p>
+
+Sematext is a monitor and logger that collects and analyzes data on application performance. Sematext runs as a single container on each monitored host and logs data for each container independently. Sematext boasts compatibility with a handful of Docker tools, including Docker Swarm, Docker cloud, Docker datacenter, Amazon EC2, Kubernetes, Mesos, and Google containers. Sematext, like competitors, also has an intuitive UI to track many different metrics for the monitored containers to ensure anomalies are identified and resolved to minimize downtime.
+
+### A quick note on some industry Docker applications
+
+
 
 ### Summary 
 
