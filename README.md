@@ -180,6 +180,10 @@ Use such a user to minimize access to host resources.
 
 Docker Content Trust (DCT) allows a user of a Docker container to verify the integrity of incoming or outgoing data or the true author of a given docker image. This is accomplished with digital signatures which uses math to make a special string that represents a piece of raw data (including large files). Setting up DCT is a great way to assert the origin of certain assets for your Docker containers.
 
+### Docker Bench Security
+
+Docker Bench Security is a very popular open source tool that allows a user to audit their Docker image to find vulnerabilities or violations of common best practices in creating and distributing Docker images. The script can be run directly inside of a Docker container using labels. The script provides output that gives feedback including `WARN`, `NOTE`, `INFO`, and `PASS` along with test descriptions to indicate what was being tested. At the end of this tutorial is a walkthrough to set up Docker Bench Security as it is a good (and free) starting point for hardening Docker images to check for any violations of best practices.
+
 ### (Another) Linux aside
 
 Alpine Linux is a distribution of Linux known for its portability and security, making it a great pairing with Docker. For comparison, the minimal installation of Ubunutu (a popular distro of linux) requires just under 4GB of disk space. On the other hand, the minimal installation of Alpine requires right around 130MB. There are also security mechanisms such as stack smashing protection and Position Independent Executables (PIEs) in place to thwart large categories of vulnerabilities. Check out https://alpinelinux.org/about/ for more on Alpine Linux.
@@ -202,28 +206,47 @@ It's important to note that no scanning software will identify every possible vu
 
 **AppArmor**
 
+<p align="center">
+  <img width="150" height="150" src="https://github.com/sandbornm/HardenDocker/blob/master/assets/apparmor.png">
+</p>
+
 AppArmor is a Linux security module that comes built-in to Docker. AppArmor allows the system administrator to specify certain security profiles to be used when certain applications are run on the operating system. AppArmor can detect certain security threats and alert the appropriate user when a threat is detected on a specific profile. In Docker, the default security profile is called `docker-default` and has moderate security. When running a container, a certain security profile can be specified from AppArmor by overriding the `--security-opt` command line arg. Otherwise, the default profile is used to run the container. It would be wise to create and run a Docker container with at least one AppArmor security profile that provides greater security than the `docker-default` profile.
 
 **Dagda**
 
-
-**Docker Bench Security** 
-
-Docker Bench Security is an open source tool that allows a user to scan their Docker image to find vulnerabilities or violations of common best practices in creating and distributing Docker images. The script can be run directly inside of a Docker container using labels. The script provides output that gives feedback including `WARN`, `NOTE`, `INFO`, and `PASS` along with test descriptions to indicate what was being tested. At the end of this tutorial is a walkthrough to set up Docker Bench Security as it is a good (and free) starting point for scanning your Docker images for any violations of best practices.
+<p align="center">
+  <img width="200" height="150" src="https://github.com/sandbornm/HardenDocker/blob/master/assets/dagda.png">
+</p>
 
 **StackRox**
+
+<p align="center">
+  <img width="150" height="150" src="https://github.com/sandbornm/HardenDocker/blob/master/assets/stackrox.png">
+</p>
 
 Stackrox is a paid, enterprise level container security manager for multiple environments, including Docker. StackRox boasts full lifecycle security of Docker containers and allows for seamless integration with Docker engine and DockerHub. StackRox has the ability to block Docker images with vulnerabilities from being deployed and also supports third-party scanners. This software also provides a network map to monitor how containers are interacting and watches for suspicious activity and can also provide assessments for security standard benchmarks. Finally, StackRox provides runtime protection from threats with automated policy enforcement to take down any images that don't adhere to defined standards or rule whitelists. This is a heavy-duty product for Docker containers at enterprise scale.
 
 **Anchore**
 
+<p align="center">
+  <img width="150" height="150" src="https://github.com/sandbornm/HardenDocker/blob/master/assets/anchore.png">
+</p>
+
 Anchore is an open source project that advertises quick and precise scanning of container images to determine vulnerabilities with easy installation. The scanner itself is packaged as a Docker image to be run on the Docker image under inspection. Anchore advertises its solution as the most comprehensive security inspection platform and checks for known vulnerabilities, exposed credentials, operatinhg system packages, 3rd party libraries, whitelist allowed elements, blacklist sensitive elements, analyzes Dockerfile contents, and identifies config files, file permissions, and unpackaged files. Here is a straighforward walkthrough to try it yourself: https://anchore.com/docker-image-security-in-5-minutes-or-less/
 
 **Clair**
 
+<p align="center">
+  <img width="240" height="80" src="https://github.com/sandbornm/HardenDocker/blob/master/assets/clair.jpg">
+</p>
+
 Clair is yet another open source Docker image scanner that aggregates vulnerability data from multiple sources and cross-references them with those scanned in a Docker image. The result of a scan is a list of vulnerabilities that threaten the container. Clair also provides the capability to notify affected containers when upstream vulnerability data changes, and to create responses to such changes programmatically as a response to maintain the security of the Docker image. 
 
 **Tenable** 
+
+<p align="center">
+  <img width="240" height="80" src="https://github.com/sandbornm/HardenDocker/blob/master/assets/tenable.png">
+</p>
 
 Tenable is another paid, enterprise level scanner that advertises its ability to eliminate vulnerabilties early via end-to-end visibility of Docker images with vulnerability assessment, malware detection, and policy enforcement. Highlight features include: automated inspection of each layer of an image, continuous assessment of threats by updating vulnerability data, policy assurance detection via risk threshold violations, runtime security and notification of container modification. Similar to StackRox, Tenable also has an appealing visualization dashboard providing metrics on an image or cluster of images.
 
