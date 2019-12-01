@@ -302,7 +302,7 @@ Sensu is a monitoring system with its own API container on DockerHub that connec
 
 Sematext is a monitor and logger that collects and analyzes data on application performance. Sematext runs as a single container on each monitored host and logs data for each container independently. Sematext boasts compatibility with a handful of Docker tools, including Docker Swarm, Docker cloud, Docker datacenter, Amazon EC2, Kubernetes, Mesos, and Google containers. Sematext, like competitors, also has an intuitive UI to track many different metrics for the monitored containers to ensure anomalies are identified and resolved to minimize downtime.
 
-### A quick note on some industry Docker applications
+### A quick note on Docker container orchestration
 
 
 
