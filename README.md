@@ -79,6 +79,10 @@ All of these namespaces work together to ensure that there is "mutual respect" o
 ### Control groups (cgroups)
 2. Control groups provide a layer of access control to the Docker container to access the host operating system and vice versa. A **control group** or **cgroup** allows resources like CPU time, memory, and network access to be allocated across running processes. Cgroups can be configured, monitored, and modified to change *how much* of a certain resource can be used by a container. A control group can be thought of as an *accountant* for the kernel's resources: the control group must keep track of how the resources are being used and allocated, ensure that containers are not promised more  than the available resources, and ensure that no one container consumes more than its allocated share of the kernel resources. 
 
+<p align="center">
+  <img width="617" height="443" src="https://github.com/sandbornm/HardenDocker/blob/master/assets/cgroups.png">
+</p>
+
 ### Network interfaces
 3. Docker containers each have their own network interface, which means they don't have access to the network interfaces (ports, addresses, etc.) of other containers. Containers can interact via their network interfaces only after exchanging permission through the host. Once this is accomplished, containers can send packets (pieces of information) and establish connections with other containers or applications using available ports and/or socket connections.
 
@@ -117,11 +121,16 @@ Docker containers have many default settings and configurations out of the box t
 
 As with many software systems, humans tend to expose unnecessary information or include extraneous items in our systems that can ultimately lead to the demise of a system. Docker images are no different! Here is a totally not comprehensive list outlining a few ways Docker images are compromised: 
 
-* Exposed credentials: this mishap leaves Docker containers vulnerable to attack via the entry point exposed by the credentials. This may include login information to a database, a server IP address/port, or an API key for an application.
+* **Exposed credentials:** this mishap leaves Docker containers vulnerable to attack via the entry point exposed by the credentials. This may include login information to a database, a server IP address/port, or an API key for an application.
 
-* Failure to secure network privileges: this allows attackers to infiltrate a Docker container via its network stack (also: Docker containers don't play nicely with traditional firewalls which keep a list of rules in an `iptable` to discern malicious and friendly connections. This means it's **super** important to understand default network configurations on your Docker image!)
+* **Failure to secure network privileges:** this allows attackers to infiltrate a Docker container via its network stack (also: Docker containers don't play nicely with traditional firewalls which keep a list of rules in an `iptable` to discern malicious and friendly connections. This means it's **super** important to understand default network configurations on your Docker image!)
 
-* Failure to adequately audit dependencies: using dependencies or images pulled from open source repositories guarantees nothing about the safety of your Docker containers! It's important to understand the implications of using certain dependencies and keeping them up-to-date and monitoring their vulnerabilities. Obsolete packages or services specified in the Dockerfile are susceptible to attackers exploiting deprecated dependenices and can lead to a crippled Docker container - or an infected host.
+* **Failure to adequately audit dependencies:** using dependencies or images pulled from open source repositories guarantees nothing about the safety of your Docker containers! It's important to understand the implications of using certain dependencies and keeping them up-to-date and monitoring their vulnerabilities. Obsolete packages or services specified in the Dockerfile are susceptible to attackers exploiting deprecated dependenices and can lead to a crippled Docker container - or an infected host.
+
+<p align="center">
+  <img width="784" height="496" src="https://github.com/sandbornm/HardenDocker/blob/master/assets/compromised.jpg">
+</p>
+
 
 With these human mistakes in mind, we turn our attention in the next section to a few known Docker vulnerabilities that are facilitated by human error.
 
@@ -316,7 +325,11 @@ Sematext is a monitor and logger that collects and analyzes data on application 
 
 # 6. Summary 
 
-Docker is a very powerful software that takes advantage of clever features of the Linux kernel. Docker allows a developer to package applications into lightweight containers for fast and easy deployment. At scale, many containers may be running at any given time working together to complete a task or provide a service. For personal use, Docker may come in handy for an application or a software project. In any case, security should be a top priority. Providing a high level of security to a Docker image is no small task, and hardening a Docker image entails ensuring best practices and scanning relevant components of the image to make sure there are no footholds for attackers to cling to and compromise your Docker image. My hope is this tutorial has sufficiently described the actions that must be taken to ensure your Docker image is as secure as possible, and that you have learned something about containers and software security in general. Use the following checklist if you ever find yourself wondering if you forgot to check or do anything on the quest to secure your Docker image. Happy Hardening! :beers:
+Docker is a very powerful software that takes advantage of clever features of the Linux kernel. Docker allows a developer to package applications into lightweight containers for fast and easy deployment. At scale, many containers may be running at any given time working together to complete a task or provide a service. For personal use, Docker may come in handy for an application or a software project. In any case, security should be a top priority. Providing a high level of security to a Docker image is no small task, and hardening a Docker image entails ensuring best practices and scanning relevant components of the image to make sure there are no footholds for attackers to cling to and compromise your Docker image. My hope is this tutorial has sufficiently described the actions that must be taken to ensure your Docker image is as secure as possible, and that you have learned something about containers and software security in general. Use the following checklist if you ever find yourself wondering if you forgot to check or do anything on the quest to secure your Docker image. **_Happy Hardening!_** :beers:
+
+<p align="center">
+  <img width="312" height="390" src="https://github.com/sandbornm/HardenDocker/blob/master/assets/containerstorm.gif">
+</p>
 
 <a name="check"/>
 
