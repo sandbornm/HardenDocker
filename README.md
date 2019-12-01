@@ -11,15 +11,16 @@
 ## This tutorial provides a basic overview of Docker and its security mechanisms, discusses best practices for creating Docker containers, and surveys a number of scanning and monitoring software to harden Docker images.
 
 # Table of Contents
-### [How does Docker work?](#how-does-docker-work)
-### [How do Docker images interact with the host?](#how-do-docker-images-interact-with-the-host)
-### [How are Docker images compromised?](#how-are-docker-images-compromised)
-### [Best practices for secure Docker images](#best-practices-for-secure-docker-images)
-### [Hardening Docker images](#hardening-docker-images)
+### [How does Docker work?](#work)
+### [How do Docker images interact with the host?](#interact)
+### [How are Docker images compromised?](#compromise)
+### [Best practices for secure Docker images](#best)
+### [Hardening Docker images](#hardening)
 ### [Summary](#summary)
 ### [Checklist](#checklist)
 ### [Sources](#sources)
 
+<a name="work"/>
 ## How does Docker work?
 
 ### Introduction
@@ -38,6 +39,7 @@ A Docker image that presently running on a machine is referred to as a **contain
 ### Why should I care?
 Docker is useful because it allows developers to create applications and package them in lightweight and independent containers that can run almost anywhere. The next thing to understand about Docker images is how they interact with the host machine: what can the Docker image access on the host machine? What can the host machine access on the Docker image? How do these things change when the **image** becomes a **container**?
 
+<a name="interact"/>
 ## How do Docker images interact with the host?
 
 ### A Linux aside
@@ -107,6 +109,7 @@ Docker containers have many default settings and configurations out of the box t
 
 ![](https://github.com/sandbornm/HardenDocker/blob/master/assets/overview.png)
 
+<a name="compromise"/>
 ## How are Docker images compromised?
 
 As with many software systems, humans tend to expose unnecessary information or include extraneous items in our systems that can ultimately lead to the demise of a system. Docker images are no different! Here is a totally not comprehensive list outlining a few ways Docker images are compromised: 
@@ -147,6 +150,7 @@ Just like non-containerized software applications, Docker containers are also su
 
 We've seen the turmoil that Docker exploits can stir up, so let's take a look at measures we can take from a defensive standpoint to ensure our Docker containers are as secure as possible.
 
+<a name="best"/>
 ## Best practices for secure Docker images
 
 ### Dockerfiles
@@ -192,6 +196,7 @@ Alpine Linux is a distribution of Linux known for its portability and security, 
 
 Let's continue to add to our defense toolkit by unpacking some scanning and monitoring software for your Docker image. In the next section, we'll take a look at how these scanners work and what they can tell you about what you are doing wrong (and right) with your Docker containers.
 
+<a name="hardening"/>
 ## Hardening Docker images
 
 While best practices are great for the users and owners of a Docker image, sometimes they aren't enough. That's why there are software tools available that can tell you what you're doing wrong or failing to do that puts your Docker container at risk. These tools are called image scanners or monitors, and can't point you in the right direction on hardening your Docker image.
@@ -304,10 +309,12 @@ Sensu is a monitoring system with its own API container on DockerHub that connec
 
 Sematext is a monitor and logger that collects and analyzes data on application performance. Sematext runs as a single container on each monitored host and logs data for each container independently. Sematext boasts compatibility with a handful of Docker tools, including Docker Swarm, Docker cloud, Docker datacenter, Amazon EC2, Kubernetes, Mesos, and Google containers. Sematext, like competitors, also has an intuitive UI to track many different metrics for the monitored containers to ensure anomalies are identified and resolved to minimize downtime.
 
+<a name="summary"/>
 ## Summary 
 
 Docker is a very powerful software that takes advantage of clever features of the Linux kernel. Docker allows a developer to package applications into lightweight containers for fast and easy deployment. At scale, many containers may be running at any given time working together to complete a task or provide a service. For personal use, Docker may come in handy for an application or a software project. In any case, security should be a top priority. Providing a high level of security to a Docker image is no small task, and hardening a Docker image entails ensuring best practices and scanning relevant components of the image to make sure there are no footholds for attackers to cling to and compromise your Docker image. My hope is this tutorial has sufficiently described the actions that must be taken to ensure your Docker image is as secure as possible, and that you have learned something about containers and software security in general. Use the following checklist if you ever find yourself wondering if you forgot to check or do anything on the quest to secure your Docker image. Happy Hardening! :beers:
 
+<a name="checklist"/>
 ## Checklist
 
 - [ ] Docker up-to-date?
@@ -319,6 +326,7 @@ Docker is a very powerful software that takes advantage of clever features of th
 - [ ] Third party scan of Docker image with feedback?
 - [ ] No exposed credentials in Dockerfile?
 
+<a name="sources"/>
 ## Sources
 1. https://resources.whitesourcesoftware.com/blog-whitesource/container-security-scanning  
 2. https://geekflare.com/docker-architecture/  
