@@ -11,14 +11,14 @@
 ## This tutorial provides a basic overview of Docker and its security mechanisms, discusses best practices for creating Docker containers, and surveys a number of scanning and monitoring software to harden Docker images.
 
 # Table of Contents
-### [How does Docker work?](#work)
-### [How do Docker images interact with the host?](#interact)
-### [How are Docker images compromised?](#compromise)
-### [Best practices for secure Docker images](#best)
-### [Hardening Docker images](#hardening)
-### [Summary](#summary)
-### [Checklist](#checklist)
-### [Sources](#sources)
+### 1. [How does Docker work?](#work)
+### 2. [How do Docker images interact with the host?](#interact)
+### 3. [How are Docker images compromised?](#compromise)
+### 4. [Best practices for secure Docker images](#best)
+### 5. [Hardening Docker images](#hardening)
+### 6. [Summary](#summary)
+### 7. [Checklist](#check)
+### 8. [Sources](#srcs)
 
 <a name="work"/>
 
@@ -320,7 +320,7 @@ Sematext is a monitor and logger that collects and analyzes data on application 
 
 Docker is a very powerful software that takes advantage of clever features of the Linux kernel. Docker allows a developer to package applications into lightweight containers for fast and easy deployment. At scale, many containers may be running at any given time working together to complete a task or provide a service. For personal use, Docker may come in handy for an application or a software project. In any case, security should be a top priority. Providing a high level of security to a Docker image is no small task, and hardening a Docker image entails ensuring best practices and scanning relevant components of the image to make sure there are no footholds for attackers to cling to and compromise your Docker image. My hope is this tutorial has sufficiently described the actions that must be taken to ensure your Docker image is as secure as possible, and that you have learned something about containers and software security in general. Use the following checklist if you ever find yourself wondering if you forgot to check or do anything on the quest to secure your Docker image. Happy Hardening! :beers:
 
-<a name="checklist"/>
+<a name="check"/>
 
 ## Checklist
 
@@ -333,9 +333,10 @@ Docker is a very powerful software that takes advantage of clever features of th
 - [ ] Third party scan of Docker image with feedback?
 - [ ] No exposed credentials in Dockerfile?
 
-<a name="sources"/>
+<a name="srcs"/>
 
 ## Sources
+
 1. https://resources.whitesourcesoftware.com/blog-whitesource/container-security-scanning  
 2. https://geekflare.com/docker-architecture/  
 3. https://docs.docker.com/engine/security/security/  
